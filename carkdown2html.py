@@ -3,12 +3,37 @@ from sys import argv, exit, stderr
 import re
 
 
-def markdown2html(mdfile, htmlfile):
-    with open(mdfile, encoding="utf-8") as file:
-        lines = [line.strip('\n') for line in file]
-        HTML = ''
+class MarkdownToHTML:
+    """Documentation"""
+    def __init__(self, mdfile):
+        """Documentation"""
+        self.content = self.openmdfile(mdfile)
+        self.html_content = ''
+
+    def openmdfile(self, mdfile):
+        """Documentation"""
+        try:
+            with open(mdfile, encoding="utf-8") as file:
+                return [line.strip('\n') for line in file]
+        except IOError:
+            print(f"Missing {mdfile}", file=stderr)
+            exit(1)
+
+    def savetoHTMLfile(self, htmlfile):
+        """Documentation"""
+        with open(htmlfile, 'w', encoding='utf-8') as file:
+            file.write(self.html_content)
+
+    def parser(self):
+        """Documentation"""
+        if not self.content:
+            print('File is empty')
+            exit(0)
+        lines = self.content
+        print(lines)
+        HTML = self.html_content
         list_items = []
-        for nline, line in enumerate(lines):
+        for nline, line in enumerate(lines):	
             HEADING = re.search(r"^#{1,6} ", line)
             ULIST = re.search(r"^- ", line)
             OLIST = re.search(r"^\* ", line)
@@ -54,17 +79,18 @@ def markdown2html(mdfile, htmlfile):
                     content = content.replace(item, f"<em>{item}</em>")
                 HTML += f"{content}\n"
 
-    return HTML
-
+        self.html_content = HTML
+        return self.html_content
+	
 
 if __name__ == '__main__':
     if len(argv) < 3:
         print("Usage: ./markdown2html.py README.md README.html", file=stderr)
         exit(1)
-    try:
-        RET = markdown2html(mdfile=argv[1], htmlfile=argv[2])
-        print(RET)
-        exit(0)
-    except IOError:
-        print("Missing {}".format(argv[1]), file=stderr)
-        exit(1)
+    f = argv[1]
+    h = argv[2]
+    x = MarkdownToHTML(f)
+    x.parser()
+    print(x.html_content)
+    x.savetoHTMLfile(h)
+
