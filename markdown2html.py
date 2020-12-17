@@ -1,9 +1,11 @@
 #!/usr/bin/python3
+"""Module for markdown2html"""
 from sys import argv, exit, stderr
 import re
 
 
 def markdown2html(mdfile, htmlfile):
+    """It is time to code a Markdown to HTML!"""
     with open(mdfile, encoding="utf-8") as file:
         lines = [line.strip('\n') for line in file]
         HTML = ''
@@ -41,7 +43,7 @@ def markdown2html(mdfile, htmlfile):
                 except IndexError:
                     HTML += '<ol>\n' + ''.join(list_items) + '</ol>\n'
                     list_items = []
-            
+
             elif BOLD:
                 content = line.replace('**', '')
                 for item in BOLD:
