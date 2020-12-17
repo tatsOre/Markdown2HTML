@@ -6,9 +6,9 @@ import re
 
 def markdown2html(mdfile, htmlfile):
     """It is time to code a Markdown to HTML!"""
+    HTML = ''
     with open(mdfile, encoding="utf-8") as file:
         lines = [line.strip('\n') for line in file]
-        HTML = ''
         list_items = []
         for nline, line in enumerate(lines):
             HEADING = re.search(r"^#{1,6} ", line)
@@ -56,6 +56,8 @@ def markdown2html(mdfile, htmlfile):
                     content = content.replace(item, f"<em>{item}</em>")
                 HTML += f"{content}\n"
 
+    with open(htmlfile, 'w', encoding='utf-8') as file:
+        file.write(HTML)
     return HTML
 
 
@@ -65,7 +67,6 @@ if __name__ == '__main__':
         exit(1)
     try:
         RET = markdown2html(mdfile=argv[1], htmlfile=argv[2])
-        print(RET)
         exit(0)
     except IOError:
         print("Missing {}".format(argv[1]), file=stderr)

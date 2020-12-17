@@ -33,7 +33,7 @@ class MarkdownToHTML:
         print(lines)
         HTML = self.html_content
         list_items = []
-        for nline, line in enumerate(lines):	
+        for nline, line in enumerate(lines):
             HEADING = re.search(r"^#{1,6} ", line)
             ULIST = re.search(r"^- ", line)
             OLIST = re.search(r"^\* ", line)
@@ -66,7 +66,7 @@ class MarkdownToHTML:
                 except IndexError:
                     HTML += '<ol>\n' + ''.join(list_items) + '</ol>\n'
                     list_items = []
-            
+
             elif BOLD:
                 content = line.replace('**', '')
                 for item in BOLD:
@@ -81,7 +81,7 @@ class MarkdownToHTML:
 
         self.html_content = HTML
         return self.html_content
-	
+
 
 if __name__ == '__main__':
     if len(argv) < 3:
@@ -93,4 +93,3 @@ if __name__ == '__main__':
     x.parser()
     print(x.html_content)
     x.savetoHTMLfile(h)
-
