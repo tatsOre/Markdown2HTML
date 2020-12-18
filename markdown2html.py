@@ -58,11 +58,11 @@ def markdown2html(mdfile, htmlfile):
             elif line:
                 try:
                     if lines[nline + 1] == '':
-                        paragraph.append(f"  {line}")
+                        paragraph.append(f"{line}")
                         HTML += f"<p>\n{''.join(paragraph)}\n</p>\n"
                         paragraph = []
                     else:
-                        paragraph.append(f"  {line}\n    <br />\n")
+                        paragraph.append(f"{line}\n<br/>\n")
                 except IndexError:
                     HTML += f"<p>\n{''.join(paragraph)}\n</p>\n"
 
