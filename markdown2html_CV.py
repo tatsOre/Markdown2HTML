@@ -53,7 +53,7 @@ class MarkdownToHTML:
             if HEADING:
                 level = len(HEADING.group(0).replace(' ', ''))
                 content = line.replace(HEADING.group(0), '')
-                HTML += f"<h{level}>{content}</h{level}>\n"
+                HTML += f"<h{level}>{self.styletext(content)}</h{level}>\n"
 
             elif ULIST or OLIST:
                 LIST = OLIST if OLIST else ULIST
@@ -65,14 +65,13 @@ class MarkdownToHTML:
                     self.__list_items = []
 
             elif line:
-                line = self.styletext(line)  # Looks for bold, emphasis style
+                paragraph.append(f"{self.styletext(line)}")
                 try:
                     if self.content[nline + 1] == '':
-                        paragraph.append(f"{line}")
                         HTML += f"<p>\n{''.join(paragraph)}\n</p>\n"
                         paragraph = []
                     else:
-                        paragraph.append(f"{line}\n<br/>\n")
+                        paragraph.append(f"\n<br/>\n")
                 except IndexError:
                     HTML += f"<p>\n{''.join(paragraph)}\n</p>\n"
 
@@ -130,7 +129,7 @@ class MarkdownToHTML:
             return line
         content = line.replace('[[', '').replace(']]', '')
         for item in match:
-            encoded = hashlib.md5(item.lower().encode()).hexdigest()
+            encoded = hashlib.md5(item.encode()).hexdigest()
             content = content.replace(item, encoded)
         return content
 
@@ -142,7 +141,9 @@ class MarkdownToHTML:
         if not match:
             return line
         content = line.replace('((', '').replace('))', '')
-        content = content.replace('c', '').replace('C', '')
+        for item in match:
+            new_word = item.replace('c', '').replace('C', '')
+        content = content.replace(item, new_word)
         return content
 
 

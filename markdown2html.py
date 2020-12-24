@@ -56,13 +56,13 @@ def markdown2html(mdfile, htmlfile):
                     list_items = []
 
             elif line:
+                paragraph.append(f"{line}")
                 try:
                     if lines[nline + 1] == '':
-                        paragraph.append(f"{line}")
                         HTML += f"<p>\n{''.join(paragraph)}\n</p>\n"
                         paragraph = []
                     else:
-                        paragraph.append(f"{line}\n<br/>\n")
+                        paragraph.append(f"\n<br/>\n")
                 except IndexError:
                     HTML += f"<p>\n{''.join(paragraph)}\n</p>\n"
 
@@ -107,7 +107,7 @@ def md5(line):
         return line
     content = line.replace('[[', '').replace(']]', '')
     for item in match:
-        encoded = hashlib.md5(item.lower().encode()).hexdigest()
+        encoded = hashlib.md5(item.encode()).hexdigest()
         content = content.replace(item, encoded)
     return content
 
@@ -118,7 +118,9 @@ def goodbyeC(line):
     if not match:
         return line
     content = line.replace('((', '').replace('))', '')
-    content = content.replace('c', '').replace('C', '')
+    for item in match:
+        new_word = item.replace('c', '').replace('C', '')
+    content = content.replace(item, new_word)
     return content
 
 
